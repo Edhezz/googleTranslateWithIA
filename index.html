@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,20 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400&display=swap" rel="stylesheet" />
     <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="./script.js"></script>
 </head>
+
 <body>
+
+    
     <div class="container">
-        
+
+    <div class="page-content">
+
         <!-- Header -->
-         <header class="header">
+        <header class="header">
             <div class="header-content">
                 <div class="logo">
                     <span class="google-g">G</span>
@@ -26,11 +32,17 @@
                     <span class="google-e">e</span>
                     <span class="translate">Traductor</span>
                 </div>
+
+                <input type="checkbox" id="theme-toggle" class="theme-toggle-checkbox">
+                <label for="theme-toggle" class="theme-toggle-label icon-button">
+                    <span class="material-symbols-outlined sun-icon">light_mode</span>
+                    <span class="material-symbols-outlined moon-icon">dark_mode</span>
+                </label>
             </div>
 
-         </header>
-         <!-- Selector-->
-         <section class="lenguage-selection">
+        </header>
+        <!-- Selector-->
+        <section class="lenguage-selection">
             <div class="source-language">
                 <select id="sourceLanguage">
                     <option value="auto">Detectar idioma</option>
@@ -70,24 +82,21 @@
                     <option value="ko">Coreano</option>
                 </select>
             </div>
-         </section>
-         <!--Textarea-->
-         <main class="translation-area">
+        </section>
+        <!--Textarea-->
+        <main class="translation-area">
             <section class="input-section">
                 <div class="textarea-container">
-                    <textarea
-                    id="inputText"
-                    placeholder="Escribe el texto"
-                    maxlength="5000"></textarea>
-                    <!-- boton para borrar el cntenido -->
+                    <textarea id="inputText" placeholder="Escribe el texto" maxlength="5000"></textarea>
+                    <span class="char-count" id="charCount">0/5000</span>
                 </div>
                 <footer class="input-controls">
                     <button class="icon-button mic-button" id="micButton">
                         <span class="material-symbols-outlined">mic</span>
                     </button>
-                    <!-- <button class="icon-button speak-button" id="speakButton">
-                        <span class="material-symbols-outlined">volume_up</span>
-                    </button> -->
+                    <button class="icon-button clear-button" id="clearButton">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
                 </footer>
             </section>
 
@@ -104,7 +113,11 @@
                     </button>
                 </footer>
             </section>
-         </main>
+        </main>
     </div>
+    </div>
+
+
 </body>
+
 </html>

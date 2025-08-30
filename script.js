@@ -37,6 +37,7 @@ class GoogleTranslator {
     constructor() {
         this.init();
         this.setupEventListeners();
+        this.setupThemeToggle();
 
         this.translationTimeout = null;
         this.currentTranslator = null;
@@ -53,6 +54,8 @@ class GoogleTranslator {
         
 
         this.micButton = $('#micButton');
+        this.clearButton = $('#clearButton');
+        this.clearButton.style.display = 'none'; // Ocultar el botón al inicio
         this.copyButton = $('#copyButton');
         this.swapLanguagesButton = $('#swapLanguages');
         this.speakButton = $('#speakButton');
@@ -79,6 +82,7 @@ class GoogleTranslator {
     setupEventListeners() {
         this.inputText.addEventListener('input', () => {
             //Actualizar contador de letras
+            this.updateClearButtonVisibility(); // Actualizar visibilidad del botón de borrar
             //traducir el texto con un debunce
             this.debounceTraslate();
         });
@@ -89,8 +93,64 @@ class GoogleTranslator {
         this.swapLanguagesButton.addEventListener('click', () => this.swapLanguages());
         this.micButton.addEventListener('click', () => this.startVoiceRecognition());
         this.speakButton.addEventListener('click', () => this.speakTranslation());
+        this.clearButton.addEventListener('click', () => this.clearContent());
+        this.copyButton.addEventListener('click', () => this.copyTranslation());
 
     }
+
+    setupThemeToggle() {
+        const themeToggle = $('#theme-toggle');
+        themeToggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+    }
+
+    updateClearButtonVisibility() {
+    const hasContent = this.inputText.value.trim().length > 0;
+    this.clearButton.style.display = hasContent ? 'block' : 'none';
+    }
+
+    clearContent() {
+    // Clear input and output text
+        this.inputText.value = '';
+        this.outputText.textContent = '';
+
+        // Reset char count
+        const charCount = $('#charCount');
+        charCount.textContent = '0/5000';
+
+        // Reset detected language if source is set to auto
+        if (this.sourceLanguage.value === 'auto') {
+            const autoOption = this.sourceLanguage.querySelector('option[value="auto"]');
+            if (autoOption) {
+                autoOption.textContent = 'Detectar idioma';
+            }
+        }
+    this.updateClearButtonVisibility(); // Actualizar visibilidad después de limpiar
+    }
+
+    async copyTranslation() {
+    const textToCopy = this.outputText.textContent.trim();
+    
+    if (!textToCopy) return;
+
+    try {
+        await navigator.clipboard.writeText(textToCopy);
+        
+        // Feedback visual temporal
+        this.copyButton.style.backgroundColor = 'var(--google-green)';
+        this.copyButton.style.color = 'white';
+        
+        // Restaurar estilo después de 1 segundo
+        setTimeout(() => {
+            this.copyButton.style.backgroundColor = '';
+            this.copyButton.style.color = '';
+        }, 1000);
+        
+    } catch (error) {
+        console.error('Error al copiar:', error);
+    }
+}
 
     debounceTraslate() {
         clearTimeout(this.translationTimeout)
@@ -168,6 +228,8 @@ class GoogleTranslator {
 
         const text = this.inputText.value.trim();
         console.log('Texto a traducir:', text);
+        const charCount = $('#charCount');
+        charCount.textContent = `${text.length}/5000`;
 
         if (!text) {
             this.outputText.value = '';
@@ -289,6 +351,8 @@ class GoogleTranslator {
 
         window.speechSynthesis.speak(utterance);
     }
+
+    
 
     async detectLanguage(text) {
         try {
